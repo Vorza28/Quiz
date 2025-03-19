@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi - IT PNM Summit</title>
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
+    
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media screen and (max-width: 768px) {
+            .form-container {
+                margin: 20px;
+                padding: 15px;
+            }
+            .container {
+                padding: 0 10px;
+            }
+            .btn {
+                width: 100%;
+            }
+            h4 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="#" class="brand-logo center">IT PNM Summit</a>
+            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <ul id="slide-out" class="sidenav">
+        <li><div class="user-view">
+            <div class="background">
+            </div>
+            <a href="#user"><img class="circle" src="pnm.png"></a>
+            <a href="#name"><span class="black-text name">PNM</span></a>
+            <a href="#email"><span class="black-text email">pnm@gmail.com</span></a>
+        </div></li>
+        <li><a href="#!">Login</a></li>
+        <li><a href="#!">Registrasi</a></li>
+        <li><div class="divider"></div></li>
+        </ul>
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+    <!-- Content -->
+    <div class="container">
+        <div class="form-container">
+            <h4 class="center-align">Registrasi</h4>
+            <form id="registrationForm">
+                <div class="input-field">
+                    <input type="text" id="fullName" name="fullName">
+                    <label for="fullName">Nama Lengkap</label>
+                    <span class="helper-text" id="fullNameError"></span>
+                </div>
+                <div class="input-field">
+                    <input type="email" id="email" name="email">
+                    <label for="email">Email</label>
+                    <span class="helper-text" id="emailError"></span>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="password" name="password">
+                    <label for="password">Password</label>
+                    <span class="helper-text" id="passwordError"></span>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="confirmPassword" name="confirmPassword">
+                    <label for="confirmPassword">Konfirmasi Password</label>
+                    <span class="helper-text" id="confirmPasswordError"></span>
+                </div>
+                <div class="input-field">
+                    <input type="text" class="datepicker" id="birthDate" name="birthDate">
+                    <label for="birthDate">Tanggal Lahir</label>
+                    <span class="helper-text" id="birthDateError"></span>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="phoneNumber" name="phoneNumber" value="+62">
+                    <label for="phoneNumber">Nomor HP</label>
+                    <span class="helper-text" id="phoneNumberError"></span>
+                </div>
+                <button type="submit" class="btn blue btn-block" id="submitButton" disabled>Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer blue">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">IT PNM Summit</h5>
+                    <p class="grey-text text-lighten-4">Startup teknologi terkini dan masa kini</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2025 Aryasuta Daniswara | 243307036
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.Sidenav.init(document.querySelectorAll('.sidenav'));
+
+            M.Datepicker.init(document.querySelectorAll('.datepicker'), {
+                format: 'yyyy-mm-dd',
+                yearRange: [1990, 2006], 
+                maxDate: new Date(2006, 11, 31),
+            });
+        });
+
+        document.getElementById('phoneNumber').addEventListener('input', function() {
+            if (!this.value.startsWith('+62')) {
+                this.value = '+62';
+            }
+        });
+
+        const form = document.getElementById('registrationForm');
+        const submitButton = document.getElementById('submitButton');
+
+        function validateForm() {
+            let isValid = true;
+            const fields = [
+                { id: 'fullName', errorId: 'fullNameError', minLength: 3, message: 'Nama minimal 3 karakter' },
+                { id: 'email', errorId: 'emailError', regex: /\S+@\S+\.\S+/, message: 'Format email tidak valid' },
+                { id: 'password', errorId: 'passwordError', minLength: 8, message: 'Password minimal 8 karakter' },
+                { id: 'confirmPassword', errorId: 'confirmPasswordError', matchId: 'password', message: 'Konfirmasi password harus sama' },
+                { id: 'birthDate', errorId: 'birthDateError', required: true, message: 'Tanggal lahir harus dipilih' },
+                { id: 'phoneNumber', errorId: 'phoneNumberError', regex: /^\+62\d{9,14}$/, message: 'Format nomor HP harus valid' }
+            ];
+
+            document.querySelectorAll('.helper-text').forEach(el => el.textContent = '');
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id).value;
+                if (field.minLength && input.length < field.minLength) {
+                    document.getElementById(field.errorId).textContent = field.message;
+                    isValid = false;
+                } else if (field.regex && !field.regex.test(input)) {
+                    document.getElementById(field.errorId).textContent = field.message;
+                    isValid = false;
+                } else if (field.matchId && input !== document.getElementById(field.matchId).value) {
+                    document.getElementById(field.errorId).textContent = field.message;
+                    isValid = false;
+                } else if (field.required && !input) {
+                    document.getElementById(field.errorId).textContent = field.message;
+                    isValid = false;
+                }
+            });
+
+            submitButton.disabled = !isValid;
+        }
+
+        document.querySelectorAll('input').forEach(input => input.addEventListener('input', validateForm));
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            M.toast({html: 'Registrasi berhasil!', classes: 'green'});
+            form.reset();
+            document.getElementById('phoneNumber').value = '+62';
+            validateForm();
+        });
+    </script>
+</body>
+</html>
